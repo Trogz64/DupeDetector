@@ -1,4 +1,5 @@
 import sys
+import os
 from os import listdir, makedirs
 from os.path import isfile, join
 import hashlib
@@ -11,7 +12,7 @@ def main():
         firstFolder = getAllImageHashes(sys.argv[1])
         secondFolder = getAllImageHashes(sys.argv[2])
         printDifferences(firstFolder, secondFolder)
-    else if len(sys.argv) == 2:
+    elif len(sys.argv) == 2:
         folder = getAllImageHashes(sys.argv[1])
         printDifferences(folder, None)
     else:
@@ -22,23 +23,33 @@ def main():
 
 def printDifferences(folder1, folder2):
     matchFound = False
-    now = datetime.datetime.now()
-    destFolder = "{}{}{}-{}-{}".format(now.year, now.month, now.day, now.second, now.microsecond)
-    makedirs(destFolder)
+    # now = datetime.datetime.now()
+    # destFolder = "{}{}{}-{}-{}".format(now.year, now.month, now.day, now.second, now.microsecond)
+    # makedirs(destFolder)
     matchCount = 0
+    imagesToDelete = []
     # Only dissalow matching filenames if in the same directory
     if folder2 == None:
         for f1 in folder1:
-            for f2 in folder1:
-                if f1[1] == f2[1] and f1[0] != f2[0]:
-                    matchCount += 1
-                    copyfile(f1[0], destFolder + "\\{" + str(matchCount) + "} " + getOnlyFilename(f1[0]))
-                    copyfile(f2[0], destFolder + "\\{" + str(matchCount) + "} " + getOnlyFilename(f2[0]))
-                    matchFound = True
-                    print("{ Match found: ")
-                    print("\t" + f1[0])
-                    print("\t" + f2[0])
-                    print("}")
+            compare = True
+            for image in imagesToDelete:
+                if f1[1] == image[1]:
+                    compare = False
+
+            if compare:
+                for f2 in folder1:
+                    if f1[1] == f2[1] and f1[0] != f2[0]:
+                        matchCount += 1
+                        # copyfile(f1[0], destFolder + "\\{" + str(matchCount) + "} " + getOnlyFilename(f1[0]))
+                        # copyfile(f2[0], destFolder + "\\{" + str(matchCount) + "} " + getOnlyFilename(f2[0]))
+                        matchFound = True
+                        print("{ Match found: ")
+                        print("\t" + f1[0])
+                        print("\t" + f2[0])
+                        print("\nDeleting " + f2[0])
+                        print("}")
+                        imagesToDelete.append(f2)
+                        
     else:
         for f1 in folder1:
             for f2 in folder2:
@@ -47,12 +58,20 @@ def printDifferences(folder1, folder2):
                     matchFound = True
                     processMatchedImages(f1, f2, matchCount, destFolder)
 
+    for image in imagesToDelete:
+        # print(image[0])
+        if os.path.exists(image[0]):
+            os.remove(image[0])
+        else:
+            print("The file does not exist")
+
+
     if not matchFound:
         print("No matches found!")
 
 def processMatchedImages(img1, img2, matchCount, destFolder):
-    copyfile(img1[0], destFolder + "\\{" + str(matchCount) + "} " + getOnlyFilename(img1[0]))
-    copyfile(img2[0], destFolder + "\\{" + str(matchCount) + "} " + getOnlyFilename(img2[0]))
+    # copyfile(img1[0], destFolder + "\\{" + str(matchCount) + "} " + getOnlyFilename(img1[0]))
+    # copyfile(img2[0], destFolder + "\\{" + str(matchCount) + "} " + getOnlyFilename(img2[0]))
     print("{ Match #" + str(matchCount) + " found: ")
     print("  " + img1[0])
     print("  " + img2[0])
