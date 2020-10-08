@@ -23,14 +23,14 @@ def main():
 
 def printDifferences(folder1, folder2):
     matchFound = False
-    # now = datetime.datetime.now()
-    # destFolder = "{}{}{}-{}-{}".format(now.year, now.month, now.day, now.second, now.microsecond)
-    # makedirs(destFolder)
     matchCount = 0
     imagesToDelete = []
+    # Single folder
     # Only dissalow matching filenames if in the same directory
     if folder2 == None:
+        # For reference: f1[0] gives filepath. f1[1] gives the image hash
         for f1 in folder1:
+            # We don't want to compare an image after we have decided it is a duplicate
             compare = True
             for image in imagesToDelete:
                 if f1[1] == image[1]:
@@ -40,26 +40,25 @@ def printDifferences(folder1, folder2):
                 for f2 in folder1:
                     if f1[1] == f2[1] and f1[0] != f2[0]:
                         matchCount += 1
-                        # copyfile(f1[0], destFolder + "\\{" + str(matchCount) + "} " + getOnlyFilename(f1[0]))
-                        # copyfile(f2[0], destFolder + "\\{" + str(matchCount) + "} " + getOnlyFilename(f2[0]))
                         matchFound = True
-                        print("{ Match found: ")
+                        print("{\nMatch #" + str(matchCount) + " found: ")
                         print("\t" + f1[0])
                         print("\t" + f2[0])
                         print("\nDeleting " + f2[0])
                         print("}")
                         imagesToDelete.append(f2)
                         
+    # Two folder compare             
     else:
         for f1 in folder1:
             for f2 in folder2:
                 if f1[1] == f2[1]:
                     matchCount += 1
                     matchFound = True
-                    processMatchedImages(f1, f2, matchCount, destFolder)
+                    processMatchedImages(f1, f2, matchCount)
 
+    # Now delete the images
     for image in imagesToDelete:
-        # print(image[0])
         if os.path.exists(image[0]):
             os.remove(image[0])
         else:
@@ -69,10 +68,8 @@ def printDifferences(folder1, folder2):
     if not matchFound:
         print("No matches found!")
 
-def processMatchedImages(img1, img2, matchCount, destFolder):
-    # copyfile(img1[0], destFolder + "\\{" + str(matchCount) + "} " + getOnlyFilename(img1[0]))
-    # copyfile(img2[0], destFolder + "\\{" + str(matchCount) + "} " + getOnlyFilename(img2[0]))
-    print("{ Match #" + str(matchCount) + " found: ")
+def processMatchedImages(img1, img2, matchCount):
+    print("{\nMatch #" + str(matchCount) + " found: ")
     print("  " + img1[0])
     print("  " + img2[0])
     print("}")
