@@ -1,22 +1,28 @@
 # DupeDetector
-Finds any duplicate images in 1 or 2 folders
+Finds any duplicate images in 1 or 2 directories
 
-- Deletes duplicate images (keeping first image) when input is 1 folder
+- Deletes duplicate images (keeping first image) when input is 1 directory
 
-- Displays duplicate image filenames when input is 2 folders
+- Displays duplicate image filenames when input is 2 directories
 
 ### Usage
 
 ```bash
-    python main.py <folder1> [folder2]
+    python main.py "dir1"
 ```
 
-**folder1 is always required**
+Or
 
-If folder2 isn't specified, the folder will be compared against itself.
+```bash
+    python main.py "dir1" "dir2"
+```
 
-Currently only works if images are in the folder; no video files.
+**dir1 is always required**
+
+If dir2 isn't specified, the directory will be compared against itself.
+
+Currently only works if images are in the directory; no video files.
 
 ### Tip:
 
-If you only want to display matches, and not delete them, compare the folder to itself using the two input folder method
+If you only want to display matches, and not delete them, compare the directory to itself using the two directory method
