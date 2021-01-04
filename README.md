@@ -21,7 +21,12 @@ Or
 
 If dir2 isn't specified, the directory will be compared against itself.
 
-Currently only works if images are in the directory; no video files.
+Program currently works for the following file extensions:
+
+- .jpg
+- .jpeg
+- .png
+- .gif
 
 ### Tip:
 
