@@ -78,7 +78,7 @@ def getOnlyFilename(fullpath):
     return fullpath.split("\\")[-1]
 
 def getAllImageHashes(folder):
-    onlyfiles = [join(folder, f) for f in listdir(folder) if isfile(join(folder, f)) and not f.endswith(".ini") and not f.endswith(".db")]
+    onlyfiles = [join(folder, f) for f in listdir(folder) if isfile(join(folder, f)) and not f.endswith(".ini") and not f.endswith(".db") and (f.endswith(".jpg") or f.endswith("jpeg") or f.endswith(".png") or f.endswith("gif"))]
     hashedFiles = []
     fileLength = len(onlyfiles)
     for f in onlyfiles:
